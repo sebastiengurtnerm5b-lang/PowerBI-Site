@@ -1,0 +1,6 @@
+Instruction
+Open the folder containing the html file then, in the address bar, enter PowerShell and add the following script:   
+
+git add .
+git commit -m "Description de la modification" 
+git push
