@@ -145,5 +145,20 @@
   });
 </script>
 
+<script>
+  // Active l'écran "Set Password" lors d'une invitation Netlify Identity
+  if (window.netlifyIdentity) {
+    window.netlifyIdentity.on("init", (user) => {
+      // Si l'utilisateur arrive depuis un lien d'invitation
+      if (!user) {
+        window.netlifyIdentity.on("login", () => {
+          // Une fois logué, on recharge la page
+          document.location.href = "/";
+        });
+      }
+    });
+  }
+</script>
+
 </body>
 </html>
