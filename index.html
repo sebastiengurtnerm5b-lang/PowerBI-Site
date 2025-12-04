@@ -16,58 +16,40 @@
 
 <body>
 
-<!-- ===== Boutons Login / Logout visibles même sans connexion ===== -->
-<header style="background:#0078D4; color:#fff; padding:20px; font-size:2em; display:flex; justify-content:center; align-items:center; position:relative;">
-  <span style="text-align:center;">TDH Canada - HR Dashboards</span>
-
-  <div style="position:absolute; right:20px;">
-    <button id="loginBtn" onclick="netlifyIdentity.open()" 
-      style="background:#fff; color:#0078D4; border:none; padding:10px 20px; border-radius:5px; cursor:pointer; font-size:1em; margin-right:10px;">
-      Login
-    </button>
-
-    <button id="logoutBtn" onclick="netlifyIdentity.logout()" 
-      style="background:#fff; color:#0078D4; border:none; padding:10px 20px; border-radius:5px; cursor:pointer; font-size:1em; display:none;">
-      Logout
-    </button>
-  </div>
+<header style="background:#0078D4; color:#fff; padding:20px; font-size:2em; text-align:center;">
+  TDH Canada - HR Dashboards
 </header>
 
-<!-- ===== Contenu protégé (caché tant que pas connecté) ===== -->
+<!-- ===== Contenu protégé (caché par défaut) ===== -->
 <div id="protectedContent" style="display:none;">
-
 
   <!-- Report 1 -->
   <section>
     <h2>Report 1: Turnover, Leavers, Starters Metrics</h2>
-
     <iframe class="report-frame" 
-    src="https://app.powerbi.com/reportEmbed?reportId=41503a57-7ce8-4b9b-8423-c990e38119b7&autoAuth=true&ctid=c162a585-4fef-44bd-9271-d96409d0a349" 
+    src="https://app.powerbi.com/reportEmbed?reportId=41503a57-7ce8-4b9b-8423-c990e38119b7&autoAuth=true&ctid=c162a585-4fef-44bd-9271-d96409d0a349"
     allowFullScreen="true"></iframe>
   </section>
 
   <!-- Report 2 -->
   <section>
     <h2>Report 2: Joby McKenzie report</h2>
-
     <iframe class="report-frame" 
-    src="https://app.powerbi.com/reportEmbed?reportId=fc05a3b1-2c7a-4155-9c78-fe55e5f82038&autoAuth=true&ctid=c162a585-4fef-44bd-9271-d96409d0a349" 
+    src="https://app.powerbi.com/reportEmbed?reportId=fc05a3b1-2c7a-4155-9c78-fe55e5f82038&autoAuth=true&ctid=c162a585-4fef-44bd-9271-d96409d0a349"
     allowFullScreen="true"></iframe>
   </section>
 
   <!-- Report 3 -->
   <section>
     <h2>Report 3: Work Anniversary</h2>
-
     <iframe class="report-frame" 
     src="https://app.powerbi.com/reportEmbed?reportId=b1fb4f11-5baa-428a-bbe2-351b51e90cca&autoAuth=true&ctid=c162a585-4fef-44bd-9271-d96409d0a349"
     allowFullScreen="true"></iframe>
   </section>
 
-   <!-- Report 4 -->
+  <!-- Report 4 -->
   <section>
     <h2>Report 4: Employee Location & Compensation</h2>
-
     <iframe class="report-frame" 
     src="https://app.powerbi.com/reportEmbed?reportId=d404d71e-3ff4-4ba0-bfcf-7862c6fb706f&autoAuth=true&ctid=c162a585-4fef-44bd-9271-d96409d0a349"
     allowFullScreen="true"></iframe>
@@ -76,7 +58,6 @@
   <!-- Report 5 -->
   <section>
     <h2>Report 5: Leave of Absence details</h2>
-
     <iframe class="report-frame" 
     src="https://app.powerbi.com/reportEmbed?reportId=a249d1e4-b99e-417e-b21d-0758b8ca2592&autoAuth=true&ctid=c162a585-4fef-44bd-9271-d96409d0a349"
     allowFullScreen="true"></iframe>
@@ -85,7 +66,6 @@
   <!-- Report 6 -->
   <section>
     <h2>Report 6: Hybrid Work Model population</h2>
-
     <iframe class="report-frame" 
     src="https://app.powerbi.com/reportEmbed?reportId=0b0eceb3-0460-4955-854a-39eac7d2782c&autoAuth=true&ctid=c162a585-4fef-44bd-9271-d96409d0a349"
     allowFullScreen="true"></iframe>
@@ -94,70 +74,35 @@
   <!-- Report 7 -->
   <section>
     <h2>Report 7: Promotions</h2>
-
     <iframe class="report-frame" 
     src="https://app.powerbi.com/reportEmbed?reportId=0bebf665-1cab-47c3-8f2d-3b599d317888&autoAuth=true&ctid=c162a585-4fef-44bd-9271-d96409d0a349"
     allowFullScreen="true"></iframe>
   </section>
 
-</div> <!-- Fin contenu protégé -->
+</div>
 
-
-
-<!-- ===== Script Netlify Identity ===== -->
-<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-
+<!-- ===== MOT DE PASSE SIMPLE ===== -->
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
+  const correctPassword = "HR2025";  // <<< CHOISIS TON MOT DE PASSE ICI
 
-    if (!window.netlifyIdentity) return;
+  document.addEventListener("DOMContentLoaded", () => {
+    let access = sessionStorage.getItem("site_auth");
 
-    // S'assure que Identity est bien initialisé
-    netlifyIdentity.init();
-
-    // Quand Identity est prêt
-    netlifyIdentity.on("init", (user) => {
-      if (user) showContent();
-      else hideContent();
-    });
-
-    // Quand l'utilisateur se connecte
-    netlifyIdentity.on("login", () => {
-      showContent();
-    });
-
-    // Quand l'utilisateur se déconnecte
-    netlifyIdentity.on("logout", () => {
-      hideContent();
-    });
-
-    function showContent() {
+    if (access === "true") {
       document.getElementById("protectedContent").style.display = "block";
-      document.getElementById("loginBtn").style.display = "none";
-      document.getElementById("logoutBtn").style.display = "inline-block";
+      return;
     }
 
-    function hideContent() {
-      document.getElementById("protectedContent").style.display = "none";
-      document.getElementById("loginBtn").style.display = "inline-block";
-      document.getElementById("logoutBtn").style.display = "none";
+    const entered = prompt("Veuillez entrer le mot de passe pour accéder au site :");
+
+    if (entered === correctPassword) {
+      sessionStorage.setItem("site_auth", "true");
+      document.getElementById("protectedContent").style.display = "block";
+    } else {
+      alert("Mot de passe incorrect.");
+      window.location.href = "https://www.google.ca";
     }
   });
-</script>
-
-<script>
-  // Active l'écran "Set Password" lors d'une invitation Netlify Identity
-  if (window.netlifyIdentity) {
-    window.netlifyIdentity.on("init", (user) => {
-      // Si l'utilisateur arrive depuis un lien d'invitation
-      if (!user) {
-        window.netlifyIdentity.on("login", () => {
-          // Une fois logué, on recharge la page
-          document.location.href = "/";
-        });
-      }
-    });
-  }
 </script>
 
 </body>
